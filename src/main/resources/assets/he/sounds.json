@@ -1,0 +1,17 @@
+{
+  "music.music_dragon": {
+    "category": "record",
+    "sounds": [{
+      "name": "he:records/music_dragon",
+      "stream": true
+    }]
+  },
+
+  "music.music_end": {
+    "category": "record",
+    "sounds": [{
+      "name": "he:records/music_end",
+      "stream": true
+    }]
+  }
+}

@@ -1,0 +1,11 @@
+item.egg_custom_dragon.name=CustomDragonSpawnEgg
+
+entity.fallingObsidian=Falling Obsidian
+entity.AngryEnderman.name=Angry Enderman
+entity.VampiriBat.name=Vampiric Bat
+entity.Dragon.name=Ender Dragon
+
+item.music_dragon.name=In The End
+item.music_end.name=End Music
+
+item.portal_token=Portal Token
