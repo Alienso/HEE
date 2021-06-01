@@ -1,5 +1,6 @@
 package HardCoreEnd.save;
 
+import HardCoreEnd.entity.EntityBlockEnderCrystal;
 import HardCoreEnd.random.NBTCompound;
 import HardCoreEnd.util.GameRegistryUtil;
 import HardCoreEnd.random.NBT;
@@ -12,12 +13,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import org.jline.utils.Log;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.util.Arrays;
+import java.util.Scanner;
 
 public final class SaveData{
+    public static File enderCrystalFile;
     private static final SaveData instance = new SaveData();
 
     public static void register(){
@@ -47,7 +48,7 @@ public final class SaveData{
     }
 
     private final GlobalDataHandler global;
-    private final PlayerDataHandler player;
+    //private final PlayerDataHandler player;
     private final ISaveDataHandler[] handlers;
 
     private File worldSaveDir;
@@ -55,10 +56,10 @@ public final class SaveData{
 
     private SaveData(){
         this.global = new GlobalDataHandler();
-        this.player = new PlayerDataHandler();
+        //this.player = new PlayerDataHandler();
 
         this.handlers = new ISaveDataHandler[]{
-                global, player
+                global//, player
         };
     }
 
@@ -66,6 +67,9 @@ public final class SaveData{
     public void onWorldLoad(WorldEvent.Load e){
         if (e.getWorld().isRemote)return;
 
+        if (e.getWorld().provider.getDimension() == 1){
+            loadEndCrystals(e);
+        }
         String id = e.getWorld().getSaveHandler().getWorldDirectory()+e.getWorld().getWorldInfo().getWorldName()+e.getWorld().getWorldInfo().getSeed();
 
         if (!worldIdentifier.equals(id)){
@@ -76,6 +80,7 @@ public final class SaveData{
 
             worldSaveDir = new File(root, "hee2");
             if (!worldSaveDir.exists())worldSaveDir.mkdirs();
+            enderCrystalFile = new File(worldSaveDir,"mojFajl.txt");
 
             for(ISaveDataHandler handler:handlers)handler.clear(worldSaveDir);
         }
@@ -107,6 +112,28 @@ public final class SaveData{
         }catch(Exception ex){
             //Log.throwable(ex, "Error writing NBT file $0", file);
             return false;
+        }
+    }
+
+    private void loadEndCrystals(WorldEvent.Load e){
+        try {
+            if (enderCrystalFile.createNewFile()) {
+            } else {
+                Scanner sc = new Scanner(enderCrystalFile);
+                while (sc.hasNextLine()){
+                    if (!sc.hasNext())
+                        return;
+                    double x = sc.nextDouble();
+                    double y = sc.nextDouble();
+                    double z = sc.nextDouble();
+                    EntityBlockEnderCrystal crystal = new EntityBlockEnderCrystal(e.getWorld());
+                    crystal.setPosition(x,y,z);
+                    e.getWorld().spawnEntity(crystal);
+                }
+            }
+        } catch (IOException ex) {
+            System.out.println("An error occurred.");
+            ex.printStackTrace();
         }
     }
 }

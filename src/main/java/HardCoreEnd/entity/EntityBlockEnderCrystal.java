@@ -96,8 +96,8 @@ public class EntityBlockEnderCrystal extends EntityEnderCrystal {
             }
             else if (crystalType == Type.BLAST){
                 crystalPos.setAir(world);
-                source.getTrueSource().sendMessage(new TextComponentString("terY: " + String.valueOf(terY)));
-                source.getTrueSource().sendMessage(new TextComponentString("crysal: " + String.valueOf(crystalPos.getY())));
+                //source.getTrueSource().sendMessage(new TextComponentString("terY: " + String.valueOf(terY)));
+                //source.getTrueSource().sendMessage(new TextComponentString("crysal: " + String.valueOf(crystalPos.getY())));
                 Pos.forEachBlock(crystalPos.offset(-5, terY-crystalPos.getY()-5, -5), crystalPos.offset(5, 0, 5), pos -> {
                     if (pos.getBlock(world) == Blocks.OBSIDIAN){
                         pos.setAir(world);

@@ -3,6 +3,7 @@ package HardCoreEnd.event;
 import HardCoreEnd.entity.EntityBlockEnderCrystal;
 import HardCoreEnd.entity.EntityBossDragon;
 import HardCoreEnd.random.Pos;
+import HardCoreEnd.save.SaveData;
 import net.minecraft.client.audio.Sound;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.entity.Entity;
@@ -19,6 +20,8 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.io.FileWriter;
+
 public class MyEventHandler {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -30,6 +33,14 @@ public class MyEventHandler {
             return;
         }
         if (entity instanceof EntityBlockEnderCrystal){
+            try {
+                FileWriter fw = new FileWriter(SaveData.enderCrystalFile,true);
+                fw.write(entity.posX +" " + entity.posY + " " + entity.posZ  + " ");
+                fw.write("\n");
+                fw.flush();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             return;
         }
 
@@ -38,12 +49,14 @@ public class MyEventHandler {
             EntityBlockEnderCrystal e = new EntityBlockEnderCrystal(world);
             e.setPosition(entity.posX,entity.posY,entity.posZ);
             world.spawnEntity(e);
+            return;
         }
         if (entity instanceof EntityDragon) {
             event.setCanceled(true);
             entity.setDead();
             EntityBossDragon dragon = new EntityBossDragon(world);
             world.spawnEntity(dragon);
+            return;
         }
     }
 

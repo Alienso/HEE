@@ -4,6 +4,7 @@ import HardCoreEnd.entity.dragon.managers.DragonChunkManager;
 import HardCoreEnd.event.MyEventHandler;
 import HardCoreEnd.network.PacketPipeline;
 import HardCoreEnd.proxy.FXClientProxy;
+import HardCoreEnd.save.SaveData;
 import HardCoreEnd.util.Reference;
 import HardCoreEnd.util.handlers.RegistryHandler;
 import net.minecraftforge.common.MinecraftForge;
@@ -30,6 +31,7 @@ public class Main {
 
     @Mod.EventHandler
     public static void preInit(FMLPreInitializationEvent event) {
+        SaveData.register();
         DragonChunkManager.register();
         sourceFile = event.getSourceFile();
         RegistryHandler.preInitRegistries();
