@@ -16,7 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
-public class ItemBase extends ItemMonsterPlacer implements IHasModel {
+public class ItemBase extends Item implements IHasModel {
 
     public ItemBase(String name){
         setUnlocalizedName(name);

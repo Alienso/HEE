@@ -157,7 +157,7 @@ public class WorldFile extends SaveFile{
         territoryVariationsTag.forEachInt((key, value) -> territoryVariations.put(deserializeLong(key), value));
         territoryPosTag.forEachLong((key, value) -> territoryPos.put(deserializeLong(key), value));
         territoryDataTag.forEachCompound((key, value) -> territoryData.put(deserializeLong(key), value));
-        rareTerritoriesTag.readLongs().forEach(rareTerritories::add);
+        //rareTerritoriesTag.readLongs().forEach(rareTerritories::add);
     }
 
     private static final String serializeByte(byte value){

@@ -66,7 +66,7 @@ public class ItemPortalToken extends Item {
         WorldFile file = SaveData.global(WorldFile.class);
 
         NBTCompound tag = NBT.item(is, true);
-        if (tag.hasKey("thash"))return Optional.of(file.getTerritoryPos(tag.getLong("thash")));
+        //tmp if (tag.hasKey("thash"))return Optional.of(file.getTerritoryPos(tag.getLong("thash")));
 
         EndTerritory territory = getTerritory(is);
         if (territory == null)return Optional.empty();
@@ -91,7 +91,7 @@ public class ItemPortalToken extends Item {
 
 
     public ItemPortalToken(){
-        String name = "portal_token";
+        String name = "ingot_token";
         setUnlocalizedName(name);
         setRegistryName(name);
         setMaxStackSize(1);

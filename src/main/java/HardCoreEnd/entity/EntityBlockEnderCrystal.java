@@ -7,17 +7,20 @@ import HardCoreEnd.random.Pos;
 import HardCoreEnd.util.MathUtil;
 import HardCoreEnd.util.Vec;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderEnd;
 import net.minecraft.world.end.DragonFightManager;
@@ -34,8 +37,6 @@ public class EntityBlockEnderCrystal extends EntityEnderCrystal {
 
     public EntityBlockEnderCrystal(World world){
         super(world);
-        double i = rand.nextDouble();
-        this.crystalType = (i<0.3) ? Type.TNT : Type.BLAST;
     }
 
     @Override
@@ -46,20 +47,25 @@ public class EntityBlockEnderCrystal extends EntityEnderCrystal {
         if (world.provider.getDimension() != 1){
             // TODO
         }
-        else if (!isDead && !world.isRemote){
+        final Pos crystalPos = Pos.at(this).offset(Facing6.DOWN_NEGY);
+        int terY = 1+DragonUtil.getTopBlockY(world, Blocks.END_STONE, crystalPos.getX()+5, crystalPos.getZ()+5, crystalPos.getY()+1);
+        if (crystalPos.getY()-terY>20)
+            crystalType = Type.TNT;
+        else crystalType = Type.BLAST;
+
+        if (!isDead && !world.isRemote){
             this.setDead();
-            this.world.createExplosion((Entity)null, this.posX, this.posY, this.posZ, 6.0F, true);
+            this.world.createExplosion(null, this.posX, this.posY, this.posZ, 6.0F, true);
             // TODO if (worldObj.provider.dimensionId == 1)WorldDataHandler.<DragonSavefile>get(DragonSavefile.class).destroyCrystal(crystalKey);
 
             Entity tar = source.getTrueSource();
 
             if (crystalType == Type.TNT){
-                final Pos crystalPos = Pos.at(this).offset(Facing6.DOWN_NEGY);
                 crystalPos.setAir(world);
                 if (tar instanceof EntityPlayer){
                     int limiter = 4+world.getDifficulty().getDifficultyId(), topblock = DragonUtil.getTopBlockY(world, Blocks.END_STONE, MathUtil.floor(posX), MathUtil.floor(posZ), MathUtil.floor(posY));
 
-                    for(EntityEnderman enderman:(List<EntityEnderman>)world.getEntitiesWithinAABB(EntityEnderman.class, new AxisAlignedBB(posX-10D, topblock-5D, posZ-10D, posX+10D, topblock+5D, posZ+10D))){
+                    for(EntityEnderman enderman: world.getEntitiesWithinAABB(EntityEnderman.class, new AxisAlignedBB(posX-10D, topblock-5D, posZ-10D, posX+10D, topblock+5D, posZ+10D))){
                         if (enderman.getDistance(posX, topblock, posZ) < 20D){
                             // TODO no longer works enderman.setTarget(tar);
                             enderman.setAttackTarget((EntityPlayer)tar);
@@ -89,13 +95,9 @@ public class EntityBlockEnderCrystal extends EntityEnderCrystal {
                 }
             }
             else if (crystalType == Type.BLAST){
-                final Pos crystalPos = Pos.at(this).offset(Facing6.DOWN_NEGY);
                 crystalPos.setAir(world);
-
-                int terY = 1+DragonUtil.getTopBlockY(world, Blocks.END_STONE, crystalPos.getX()+5, crystalPos.getZ()+5, crystalPos.getY()+1);
-                tar.sendMessage(new TextComponentString("ter: " + String.valueOf(terY)));
-                tar.sendMessage(new TextComponentString("crytaly: " + String.valueOf(crystalPos.getY())));
-
+                source.getTrueSource().sendMessage(new TextComponentString("terY: " + String.valueOf(terY)));
+                source.getTrueSource().sendMessage(new TextComponentString("crysal: " + String.valueOf(crystalPos.getY())));
                 Pos.forEachBlock(crystalPos.offset(-5, terY-crystalPos.getY()-5, -5), crystalPos.offset(5, 0, 5), pos -> {
                     if (pos.getBlock(world) == Blocks.OBSIDIAN){
                         pos.setAir(world);
@@ -135,7 +137,6 @@ public class EntityBlockEnderCrystal extends EntityEnderCrystal {
             }
         }
     }
-    /*@Override
     public void writeEntityToNBT(NBTTagCompound nbt){
         super.writeEntityToNBT(nbt);
         nbt.setByte("crystalType", (byte)crystalType.ordinal());
@@ -147,6 +148,6 @@ public class EntityBlockEnderCrystal extends EntityEnderCrystal {
         super.readEntityFromNBT(nbt);
         crystalType = Type.values()[MathUtil.clamp(nbt.getByte("crystalType"), 0, Type.values().length-1)];
         crystalKey = nbt.getString("crystalKey");
-    }*/
+    }
     
 }

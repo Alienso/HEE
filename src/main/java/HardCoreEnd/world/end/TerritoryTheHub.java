@@ -15,7 +15,7 @@ import java.util.Random;
 public class TerritoryTheHub extends TerritoryGenerator{
     private final GenerateIslandNoise island;
     //private final GenerateBlobs blobs;
-    //private final GenerateHubTokenHolder tokenHolders;
+    private final GenerateHubTokenHolder tokenHolders;
     private final GenerateHubVoidPortal voidPortal;
 
     public TerritoryTheHub(EndTerritory territory, EnumSet variations, StructureWorld world, Random rand){
@@ -60,12 +60,12 @@ public class TerritoryTheHub extends TerritoryGenerator{
                 .addPopulator(new BlobPopulatorCover(1).setBlock(BlockList.ravish_bell).setChance(0.1D))
                 .setPopulatorAmount(random -> random.nextInt(4) == 0 ? 1 : 0)
         );
-
+*/
         this.tokenHolders = new GenerateHubTokenHolder();
         this.tokenHolders.setAttempts(15000);
         this.tokenHolders.setAmount(new IRangeGenerator.RangeGenerator(3, 3, RandomAmount.linear));
         this.tokenHolders.setMinDistance(48D);
-*/
+
         this.voidPortal = new GenerateHubVoidPortal();
         this.voidPortal.setAttempts(50000);
     }
@@ -82,9 +82,9 @@ public class TerritoryTheHub extends TerritoryGenerator{
             }
         }
 
-        /*tokenHolders.generate(territory, world, rand);
+        tokenHolders.generate(territory, world, rand);
 
-        blobs.generateSplit(world, rand);
+        /*blobs.generateSplit(world, rand);
         endPowderOreMain.generateSplit(world, rand);
         endPowderOreSurface.generateSplit(world, rand);*/
 
