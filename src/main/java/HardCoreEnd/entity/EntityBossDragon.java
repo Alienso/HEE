@@ -210,14 +210,14 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
                 this.switchMusic(SoundsHandler.MUSIC_DRAGON);
             }
             if (!world.isRemote){
-                if (ticksExisted%80 == 0){
+                /*if (ticksExisted%80 == 0){
                     try {
-                        //(attacks.getViablePlayers()).get(0).sendMessage(new TextComponentString(this.currentAttack.toString()));
-                        //(attacks.getViablePlayers()).get(0).sendMessage(new TextComponentString(String.valueOf(this.getHealth())));
+                        (attacks.getViablePlayers()).get(0).sendMessage(new TextComponentString(this.currentAttack.toString()));
+                        (attacks.getViablePlayers()).get(0).sendMessage(new TextComponentString(String.valueOf(this.getHealth())));
                     }catch(IndexOutOfBoundsException e){
 
                     }
-                }
+                }*/
                 if (spawnCooldown > 0 && --spawnCooldown > 0 && ticksExisted%20 == 0){
                     for(EntityPlayer player:attacks.getViablePlayers()){
                         if (world.getBlockState(player.getPosition().down()).getBlock() == Blocks.END_STONE){
@@ -282,14 +282,14 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
                         int perc = attacks.getHealthPercentage();
 
                         if (perc < 40 && rand.nextInt(500 - (50 - perc) * 8) == 0) {
-						/* TODO int x = (int)posX+rand.nextInt(301)-150, z = (int)posZ+rand.nextInt(301)-150;
-						int y = 1+DragonUtil.getTopBlockY(worldObj, Blocks.end_stone, x, z);
+                            int x = (int)posX+rand.nextInt(301)-150, z = (int)posZ+rand.nextInt(301)-150;
+						    int y = 1+DragonUtil.getTopBlockY(worldObj, Blocks.END_STONE, x, z);
 
-						EntityMobAngryEnderman buddy = new EntityMobAngryEnderman(worldObj);
-						buddy.setPosition(x, y, z);
+						    EntityMobAngryEnderman buddy = new EntityMobAngryEnderman(worldObj);
+						    buddy.setPosition(x, y, z);
 
-						worldObj.addWeatherEffect(new EntityWeatherLightningBoltSafe(worldObj, x, y, z));
-						worldObj.spawnEntityInWorld(buddy);*/
+						    worldObj.addWeatherEffect(new EntityWeatherLightningBoltSafe(worldObj, x, y, z));
+						    worldObj.spawnEntity(buddy);
                         }
 
                         lastUpdate = world.getTotalWorldTime();

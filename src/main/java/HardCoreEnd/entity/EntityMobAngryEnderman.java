@@ -66,7 +66,7 @@ public class EntityMobAngryEnderman extends EntityEnderman {
     protected void initEntityAI()
     {
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(2, new EntityAIAttackMelee(this, 1.0D, false));
+        this.tasks.addTask(2, new EntityAIAttackMelee(this, 1.0D, true));
         this.tasks.addTask(7, new EntityAIWanderAvoidWater(this, 1.0D, 0.0F));
         this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(8, new EntityAILookIdle(this));
@@ -89,7 +89,7 @@ public class EntityMobAngryEnderman extends EntityEnderman {
     protected void initializeEntityAttributes() {
         //super.func_110147_ax();
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(CommonProxy.opMobs ? 40.0D : 32.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(7.4D*0.3F);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(CommonProxy.opMobs ? 7.4*0.3F : 0.3F);
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(CommonProxy.opMobs ? 9.0D : 5.0D);
     }
 
@@ -132,6 +132,8 @@ public class EntityMobAngryEnderman extends EntityEnderman {
                             break;
                         }
                     }*/
+                    if (EntitySelector.players(world).isEmpty())
+                        return;
                     this.target = EntitySelector.players(world).get(0);
                     this.setAttackTarget(target);
                     this.setRevengeTarget(target);
@@ -165,7 +167,7 @@ public class EntityMobAngryEnderman extends EntityEnderman {
 
         if (flag)
         {
-            this.world.playSound((EntityPlayer)null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, this.getSoundCategory(), 1.0F, 1.0F);
+            this.world.playSound(null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, this.getSoundCategory(), 1.0F, 1.0F);
             this.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
         }
 
@@ -251,7 +253,7 @@ public class EntityMobAngryEnderman extends EntityEnderman {
 
         public void startExecuting()
         {
-            this.aggroTime = 999;
+            this.aggroTime = 999999;
             this.teleportTime = 0;
         }
 
