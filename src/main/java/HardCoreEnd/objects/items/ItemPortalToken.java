@@ -91,7 +91,7 @@ public class ItemPortalToken extends Item {
 
 
     public ItemPortalToken(){
-        String name = "ingot_token";
+        String name = "portal_token";
         setUnlocalizedName(name);
         setRegistryName(name);
         setMaxStackSize(1);

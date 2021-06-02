@@ -49,7 +49,7 @@ public class EntityBlockEnderCrystal extends EntityEnderCrystal {
         }
         final Pos crystalPos = Pos.at(this).offset(Facing6.DOWN_NEGY);
         int terY = 1+DragonUtil.getTopBlockY(world, Blocks.END_STONE, crystalPos.getX()+5, crystalPos.getZ()+5, crystalPos.getY()+1);
-        if (crystalPos.getY()-terY>20)
+        if (crystalPos.getY()-terY>25)
             crystalType = Type.TNT;
         else crystalType = Type.BLAST;
 

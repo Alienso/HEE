@@ -65,10 +65,12 @@ public class EntityBlockFallingObsidian extends EntityFallingBlock{
             motionY *= -0.5D;
 
             if (fallTime > 5 && pos.getBlock(world) != Blocks.PISTON_EXTENSION && world.getEntitiesWithinAABB(EntityBossDragon.class, getEntityBoundingBox().expand(1,1,1)).isEmpty()){
-                if (pos.setBlock(world, func_145805_f().getDefaultState()))setDead();
+                //TODO setBlock fails if (pos.setBlock(world, func_145805_f().getDefaultState()))setDead();
+                pos.setBlock(world, func_145805_f().getDefaultState());
+                setDead();
             }
         }
-        else if (!world.isRemote && (pos.getY() < 1 || fallTime > 600)){
+        else if (!world.isRemote && (pos.getY() < 1 || fallTime > 200)){
             dropItem(Item.getItemFromBlock(Blocks.OBSIDIAN), 1);
             setDead();
         }

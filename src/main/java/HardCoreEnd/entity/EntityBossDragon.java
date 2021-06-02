@@ -212,8 +212,9 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
             if (!world.isRemote){
                 /*if (ticksExisted%80 == 0){
                     try {
-                        (attacks.getViablePlayers()).get(0).sendMessage(new TextComponentString(this.currentAttack.toString()));
-                        (attacks.getViablePlayers()).get(0).sendMessage(new TextComponentString(String.valueOf(this.getHealth())));
+                        //(attacks.getViablePlayers()).get(0).sendMessage(new TextComponentString(String.valueOf(this.fightManager.getNumAliveCrystals())));
+                        //(attacks.getViablePlayers()).get(0).sendMessage(new TextComponentString(this.currentAttack.toString()));
+                        //(attacks.getViablePlayers()).get(0).sendMessage(new TextComponentString(String.valueOf(this.getHealth())));
                     }catch(IndexOutOfBoundsException e){
 
                     }
@@ -236,7 +237,11 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
                 if (loadTimer == 0 && !angryStatus && ticksExisted%10 == 0){
                     // TODO DragonFile save = SaveData.global(DragonFile.class);
 
-                    if (/* TODO save.countCrystals() <= 2 || */attacks.getHealthPercentage() <= 80){
+                    if (attacks.getHealthPercentage() <= 80){
+                        setAngry(true);
+                        spawnCooldown = 0;
+                    }
+                    else if (this.fightManager.getNumAliveCrystals()<=2 && ticksExisted>200){
                         setAngry(true);
                         spawnCooldown = 0;
                     }
@@ -459,7 +464,6 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
         @Override
         public boolean attackEntityFromPart(MultiPartEntityPart dragonPart, DamageSource source, float amount){
             if ((source.isExplosion() && source.getTrueSource()== this) || dragonHurtTime > 0 || freezeAI)return false;
-            //getImmedieteSource? TODO
             if (noViablePlayers && source.getTrueSource() instanceof EntityPlayer && !attacks.isPlayerViable((EntityPlayer)source.getTrueSource()))amount *= 0.1F;
             spawnCooldown = 0;
 
@@ -489,7 +493,6 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
             //if ((source.getTrueSource() instanceof EntityPlayer || source.isExplosion()) && super.attackEntityFrom(source, amount))hurtResistantTime = (dragonHurtTime = (byte)(hurtTime = 15))+10;
             if ((source.getTrueSource() instanceof EntityPlayer || source.isExplosion()) && super.attackDragonFrom(source, amount))hurtResistantTime = (dragonHurtTime = (byte)(hurtTime = 15))+10;
             // TODO CausatumUtils.increase(source, CausatumMeters.DRAGON_DAMAGE, amount*16F);
-            //EndMusicType.update(isAngry() ? EndMusicType.DRAGON_ANGRY : EndMusicType.DRAGON_CALM);
             return true;
         }
 
@@ -826,10 +829,10 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
         protected String getHurtSound(){
             return Baconizer.soundNormal("mob.enderdragon.hit");
         }
-
+*/
         @Override
         protected float getSoundVolume(){
             return angryStatus ? 6.5F : 5F;
-        }*/
+        }
     }
 
