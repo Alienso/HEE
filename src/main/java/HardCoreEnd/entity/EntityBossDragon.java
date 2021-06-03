@@ -563,6 +563,7 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
             renderYawOffset = rotationYaw += 20F;
 
             if (deathTicks == 200 && !worldObj.isRemote){
+                rewards.spawnPortalToken(world,(int)posX,(int)posZ);
                 DragonUtil.spawnXP(this, 2000);
                 DragonChunkManager.release(this);
                 this.fightManager.processDragonDeath(this);

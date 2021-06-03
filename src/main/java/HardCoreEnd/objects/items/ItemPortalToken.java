@@ -1,5 +1,6 @@
 package HardCoreEnd.objects.items;
 
+import HardCoreEnd.Main;
 import HardCoreEnd.collections.BitStream;
 import HardCoreEnd.collections.EmptyEnumSet;
 import HardCoreEnd.init.ItemInit;
@@ -8,6 +9,7 @@ import HardCoreEnd.random.Pos;
 import HardCoreEnd.save.SaveData;
 import HardCoreEnd.save.WorldFile;
 import HardCoreEnd.util.CollectionUtil;
+import HardCoreEnd.util.IHasModel;
 import HardCoreEnd.world.end.EndTerritory;
 import HardCoreEnd.random.NBT;
 import net.minecraft.block.state.IBlockState;
@@ -43,15 +45,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.*;
 import javax.annotation.Nullable;
 
-public class ItemPortalToken extends Item {
+public class ItemPortalToken extends Item implements IHasModel {
 
     public ItemPortalToken(String name){
-        super();
         setUnlocalizedName(name);
         setRegistryName(name);
         setCreativeTab(CreativeTabs.MISC);
-        //setMaxStackSize(1);
-        //setHasSubtypes(true);
+
         ItemInit.ITEMS.add(this);
 
     }
@@ -188,7 +188,7 @@ public class ItemPortalToken extends Item {
         return Optional.of(spawnPos);
     }
 
-    @Override
+    /*@Override
     public String getUnlocalizedName(ItemStack is){
         return isRare(is) ? getUnlocalizedName()+".rare" : getUnlocalizedName();
     }
@@ -222,6 +222,11 @@ public class ItemPortalToken extends Item {
     @SideOnly(Side.CLIENT)
     public boolean requiresMultipleRenderPasses(){
         return true;
+    }
+*/
+    @Override
+    public void registerModels(){
+        Main.proxy.registerItemRenderer(this,0,"inventory");
     }
 
     /*@Override

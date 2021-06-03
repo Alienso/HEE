@@ -1,6 +1,7 @@
 package HardCoreEnd.entity.dragon.managers;
 
 import HardCoreEnd.entity.EntityBossDragon;
+import HardCoreEnd.init.ItemInit;
 import HardCoreEnd.util.EntitySelector;
 import HardCoreEnd.util.MathUtil;
 import net.minecraft.entity.item.EntityItem;
@@ -102,6 +103,15 @@ public class DragonRewardManager {
         double fx = x + Math.cos(ang) * len,
                 fz = z + Math.sin(ang) * len;
         EntityItem item = new EntityItem(world, fx + world.rand.nextDouble() - 0.5D, 128, fz + world.rand.nextDouble() - 0.5D, new ItemStack(Items.DIAMOND, getEssencePerTick(), 0));
+        world.spawnEntity(item);
+    }
+
+    public void spawnPortalToken(World world, int x, int z) {
+        float len = Math.min(44F, (float) (Math.abs(world.rand.nextGaussian()) * 24D));
+        double ang = world.rand.nextDouble() * Math.PI * 2D;
+        double fx = x + Math.cos(ang) * len,
+                fz = z + Math.sin(ang) * len;
+        EntityItem item = new EntityItem(world, fx + world.rand.nextDouble() - 0.5D, 128, fz + world.rand.nextDouble() - 0.5D, new ItemStack(ItemInit.PortalToken, 2, 0));
         world.spawnEntity(item);
     }
 

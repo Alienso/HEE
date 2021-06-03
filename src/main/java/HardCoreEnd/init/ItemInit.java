@@ -11,10 +11,6 @@ import java.util.List;
 
 public class ItemInit {
     public static final List<Item> ITEMS = new ArrayList<Item>();
-    /*public static final Item DragonSpawnEgg = new ItemBase("egg_custom_dragon");
-    public static final Item AngryEndermanSpawnEgg = new ItemBase("egg_angry_enderman");
-    public static final Item VampiricBatSpawnEgg = new ItemBase("egg_vampiric_bat");
-    public static final Item LightningSafeSpawnEgg = new ItemBase("egg_safe_lightning");*/
 
     public static final Item PortalToken = new ItemPortalToken("item_portal_token");
 

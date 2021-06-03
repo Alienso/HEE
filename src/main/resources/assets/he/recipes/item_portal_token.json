@@ -2,19 +2,16 @@
     "type": "minecraft:crafting_shaped",
     "pattern":
     [
-        "xx ",
-        "xax",
-        "xxx"
+        " x ",
+        "x  x",
+        " x "
     ],
     "key":
     {
         "x":
         {
-            "item": "minecraft:oak_planks"
-        },
-        "a":
-        {
-            "item": "minecraft:stone"
+            "item": "minecraft:stone",
+			"data":0
         }
     },
     "result":

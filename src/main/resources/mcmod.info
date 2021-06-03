@@ -1,0 +1,16 @@
+[
+{
+  "modid": "he",
+  "name": "HardCore Ender Expansion",
+  "description": "Example placeholder mod.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["ExampleDude"],
+  "credits": "The Forge and FML guys, for making this example",
+  "logoFile": "hee_logo.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]
