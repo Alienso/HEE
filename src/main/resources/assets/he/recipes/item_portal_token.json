@@ -1,0 +1,25 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        "xx ",
+        "xax",
+        "xxx"
+    ],
+    "key":
+    {
+        "x":
+        {
+            "item": "minecraft:oak_planks"
+        },
+        "a":
+        {
+            "item": "minecraft:stone"
+        }
+    },
+    "result":
+    {
+        "item": "he:item_portal_token",
+        "count": 1
+    }
+}

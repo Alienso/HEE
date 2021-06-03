@@ -3,6 +3,7 @@ package HardCoreEnd.util.handlers;
 import HardCoreEnd.init.BlockInit;
 import HardCoreEnd.init.EntityInit;
 import HardCoreEnd.init.ItemInit;
+import HardCoreEnd.objects.items.ItemPortalToken;
 import HardCoreEnd.util.IHasModel;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;

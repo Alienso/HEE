@@ -16,7 +16,7 @@ public class ItemInit {
     public static final Item VampiricBatSpawnEgg = new ItemBase("egg_vampiric_bat");
     public static final Item LightningSafeSpawnEgg = new ItemBase("egg_safe_lightning");*/
 
-    public static final Item PortalToken = new ItemPortalToken();
+    public static final Item PortalToken = new ItemPortalToken("item_portal_token");
 
     public static final Item DragonDisc = new CustomMusicDisc("music_dragon", SoundsHandler.MUSIC_DRAGON);
     public static final Item EndDisc = new CustomMusicDisc("music_end",SoundsHandler.MUSIC_END);
