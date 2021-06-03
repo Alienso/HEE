@@ -65,7 +65,7 @@ public class EntityBlockFallingObsidian extends EntityFallingBlock{
             motionY *= -0.5D;
 
             if (fallTime > 5 && pos.getBlock(world) != Blocks.PISTON_EXTENSION && world.getEntitiesWithinAABB(EntityBossDragon.class, getEntityBoundingBox().expand(1,1,1)).isEmpty()){
-                //TODO setBlock fails if (pos.setBlock(world, func_145805_f().getDefaultState()))setDead();
+                //TODO setBlock fails sometimes, if (pos.setBlock(world, func_145805_f().getDefaultState()))setDead();
                 pos.setBlock(world, func_145805_f().getDefaultState());
                 setDead();
             }

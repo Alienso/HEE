@@ -87,7 +87,7 @@ public class EntityBlockEnderCrystal extends EntityEnderCrystal {
                         case 2:case 4:case 7: tz = v; break;
                     }
 
-                    EntityTNTPrimed tnt = new EntityTNTPrimed(world, posX+0.5F, posY+1F, posZ+0.5F, null);
+                    EntityBlockEnhancedTNTPrimed tnt = new EntityBlockEnhancedTNTPrimed(world, posX+0.5F, posY+1F, posZ+0.5F, null);
                     tnt.addVelocity(tx, 1F, tz);
                     tnt.setFuse((int)(58+(posY-DragonUtil.getTopBlockY(world, Blocks.END_STONE, MathUtil.floor(posX), MathUtil.floor(posZ), MathUtil.floor(posY)))/2));
                     world.spawnEntity(tnt);
@@ -96,8 +96,6 @@ public class EntityBlockEnderCrystal extends EntityEnderCrystal {
             }
             else if (crystalType == Type.BLAST){
                 crystalPos.setAir(world);
-                //source.getTrueSource().sendMessage(new TextComponentString("terY: " + String.valueOf(terY)));
-                //source.getTrueSource().sendMessage(new TextComponentString("crysal: " + String.valueOf(crystalPos.getY())));
                 Pos.forEachBlock(crystalPos.offset(-5, terY-crystalPos.getY()-5, -5), crystalPos.offset(5, 0, 5), pos -> {
                     if (pos.getBlock(world) == Blocks.OBSIDIAN){
                         pos.setAir(world);

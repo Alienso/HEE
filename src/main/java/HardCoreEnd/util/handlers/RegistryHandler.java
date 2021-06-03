@@ -35,7 +35,6 @@ public class RegistryHandler {
 
     public static void preInitRegistries(){
         EntityInit.registerEntity();
-        EntityInit.registerEndEntities();
         SoundsHandler.registerSounds();
     }
 

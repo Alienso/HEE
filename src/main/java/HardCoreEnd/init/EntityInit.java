@@ -20,10 +20,4 @@ public class EntityInit {
     private static void registerEntity(String name, Class<? extends Entity> entity,int id,int range,int color1,int color2){
         EntityRegistry.registerModEntity(new ResourceLocation(Reference.MODID + ":" + name),entity,name,id, Main.instance,range,1,true,color1,color2);
     }
-    public static void registerEndEntities() {
-        //GameRegistryUtil.registerEntity(new ResourceLocation(Reference.MODID + ":" + "fallingObsidian"),EntityBlockFallingObsidian.class, "FallingObsidian", 26, 128);
-        //GameRegistryUtil.registerEntity(new ResourceLocation("textures/entity/enderdragon/dragon.png"),EntityBossDragon.class, "Dragon", 8, 320);
-        //GameRegistryUtil.registerEntity(new ResourceLocation(Reference.MODID + ":" + "LightningBoldSafe"),EntityWeatherLightningBoltSafe.class, "LightningBoltSafe", 4, 512, 1, false);
-        //GameRegistryUtil.registerEntity(new ResourceLocation("textures/entity/bat.png"), EntityMobVampiricBat.class, "VampireBat", 10, 256);
-    }
 }

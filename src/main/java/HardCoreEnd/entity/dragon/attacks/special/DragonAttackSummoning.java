@@ -54,7 +54,7 @@ public class DragonAttackSummoning extends DragonSpecialAttackBase {
             for (int amt = MathUtil.clamp(MathUtil.ceil(viablePlayers.size() * (0.2D + rand.nextDouble() * 0.25D)), 1, viablePlayers.size()), aggro = 0, total = 0; amt > 0; amt--) {
                 EntityPlayer player = viablePlayers.remove(rand.nextInt(viablePlayers.size()));
 
-				for(EntityMobAngryEnderman enderman:(List<EntityMobAngryEnderman>)dragon.worldObj.getEntitiesWithinAABB(EntityMobAngryEnderman.class, player.getEntityBoundingBox().expand(14D, 5D, 14D))){
+				for(EntityMobAngryEnderman enderman: dragon.worldObj.getEntitiesWithinAABB(EntityMobAngryEnderman.class, player.getEntityBoundingBox().expand(14D, 5D, 14D))){
 					if (enderman.getTarget() == player)++aggro;
 					++total;
 				}

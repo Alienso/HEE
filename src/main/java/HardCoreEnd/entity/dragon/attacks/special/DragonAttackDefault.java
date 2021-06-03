@@ -61,7 +61,7 @@ public class DragonAttackDefault extends DragonSpecialAttackBase {
 
         if (!dragon.angryStatus) {
             if (!stealthInProgress && ++seesCheck > 20 && dragon.target == null) {
-                for (EntityPlayer player : (List<EntityPlayer>) dragon.worldObj.playerEntities) {
+                for (EntityPlayer player : dragon.worldObj.playerEntities) {
                     UUID id = player.getUniqueID();
 
                     if (getVision(dragon, player) && seesDragon.adjustOrPutValue(id, (byte) 1, (byte) 1) > 4 + (getDifficulty() >> 1)) {

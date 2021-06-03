@@ -29,6 +29,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.EntityEnderCrystal;
+import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -50,10 +51,7 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
 
     private final DragonFightManager fightManager;
     public World worldObj = getWorld();
-    private int sittingDamageReceived;
     public BossInfoServer bossInfo = (BossInfoServer)(new BossInfoServer(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS)).setDarkenSky(true);;
-
-    private enum Data{ ANGRY, WING_SPEED }
 
     public static final byte ATTACK_FIREBALL = 0, ATTACK_BITE = 1;
     public static long lastUpdate;
@@ -85,8 +83,6 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
 
     boolean change_lock = false;
     boolean should_change_music = false;
-
-    //private EntityDataWatcher entityData;
 
     public float WING_SPEED = 0;
     public boolean ANGRY = false;
@@ -134,7 +130,6 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
 
         if (!world.isRemote && world.provider instanceof WorldProviderEnd)
         {
-            //setRenderDistanceWeight(5D);
             this.fightManager = ((WorldProviderEnd)world.provider).getDragonFightManager();
         }
         else
@@ -172,9 +167,6 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
         @Override
         protected void entityInit(){
             super.entityInit();
-            /*entityData = new EntityDataWatcher(this);
-            entityData.addBoolean(Data.ANGRY);
-            entityData.addFloat(Data.WING_SPEED);*/
         }
 
         @Override
@@ -210,15 +202,6 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
                 this.switchMusic(SoundsHandler.MUSIC_DRAGON);
             }
             if (!world.isRemote){
-                /*if (ticksExisted%80 == 0){
-                    try {
-                        //(attacks.getViablePlayers()).get(0).sendMessage(new TextComponentString(String.valueOf(this.fightManager.getNumAliveCrystals())));
-                        //(attacks.getViablePlayers()).get(0).sendMessage(new TextComponentString(this.currentAttack.toString()));
-                        //(attacks.getViablePlayers()).get(0).sendMessage(new TextComponentString(String.valueOf(this.getHealth())));
-                    }catch(IndexOutOfBoundsException e){
-
-                    }
-                }*/
                 if (spawnCooldown > 0 && --spawnCooldown > 0 && ticksExisted%20 == 0){
                     for(EntityPlayer player:attacks.getViablePlayers()){
                         if (world.getBlockState(player.getPosition().down()).getBlock() == Blocks.END_STONE){
@@ -510,13 +493,13 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
                     //achievements.onBattleFinished();
                     this.world.playBroadcastSound(1028, new BlockPos(this), 0);
                 }
-                /*else if (deathTicks == 20 || deathTicks == 140){ // double check
+                else if (deathTicks == 20 || deathTicks == 140){ // double check
                     for(Entity entity: EntitySelector.any(worldObj)){
                         if (MathUtil.distance(entity.posX, entity.posZ) > 180D)continue;
 
-                        // TODO no longer works if (entity instanceof EntityEnderman)((EntityEnderman)entity).setTarget(null);
+                        if (entity instanceof EntityEnderman)((EntityEnderman)entity).setAttackTarget(null);
                     }
-                }*/
+                }
                 /*else if (deathTicks > 4 && deathTicks < 70 && deathTicks%4 == 0){
                     BlockPos.MutableBlockPos mpos = new BlockPos.MutableBlockPos();
 

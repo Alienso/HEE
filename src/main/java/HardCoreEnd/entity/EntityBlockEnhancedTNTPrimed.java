@@ -64,6 +64,8 @@ public class EntityBlockEnhancedTNTPrimed extends EntityTNTPrimed {
         motionY *= 0.98D;
         motionZ *= 0.98D;
 
+        if (ticksExisted>40)
+            noClip = false;
         if (!world.isRemote && noClip){
             Block block = Pos.at(this).getDown().getBlock(world);
 

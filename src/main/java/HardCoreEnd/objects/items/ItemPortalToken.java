@@ -58,43 +58,33 @@ public class ItemPortalToken extends Item implements IHasModel {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand){
-        ItemStack is = player.getActiveItemStack();
+        ItemStack is = player.getHeldItem(hand);
+        is.setCount(is.getCount()-1);
 
-        /*WorldServer worldServer = (WorldServer) world;
-        ChunkProviderServer chunkProviderServer = worldServer.getChunkProvider();
-        IChunkGenerator generator = chunkProviderServer.chunkGenerator;
-        generator.generateChunk(0,0);*/
         if (world.isRemote)
-            return new ActionResult<ItemStack>(EnumActionResult.PASS,is);;
+            return new ActionResult<>(EnumActionResult.PASS, is);;
         if (world.provider.getDimension() == 1) {
+            player.sendMessage(new TextComponentString("Rebuilding End... Don't do anything stupid."));
             refreshChunksBAD2(world);
             generatePortal(world,false);
-            //((WorldProviderEnd)world.provider).getDragonFightManager().respawnDragon();
+            player.sendMessage(new TextComponentString("Done!"));
         }
-        /*if (!world.isRemote && player.capabilities.isCreativeMode && getTerritory(is) != null){
-            generateTerritory(is,world);
-            NBT.item(is, true).setInt("variations", getTerritory(is).properties.generateVariationsSerialized(world.rand, isRare(is)));
-        }*/
 
-        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS,is);
+        return new ActionResult<>(EnumActionResult.SUCCESS, is);
     }
 
     public static void refreshChunksBAD2(World world) {
         try {
-            ChunkProviderServer chunkServer = (ChunkProviderServer) world.getChunkProvider();
             List<ChunkPos> toUnload = new ArrayList<>();
 
             for (int i=-16;i<=16;i++)
                 for (int j=-16;j<16;j++)
                     toUnload.add(new ChunkPos(i,j));
 
-            int i = toUnload.size();
             for (ChunkPos pair : toUnload) {
-                i--;
                 Chunk oldChunk = world.getChunkFromChunkCoords(pair.x, pair.z);
                 WorldServer worldServer = (WorldServer) world;
                 ChunkProviderServer chunkProviderServer = worldServer.getChunkProvider();
-                IChunkProvider chunkProviderGenerate = chunkProviderServer.world.getChunkProvider();
                 IChunkGenerator generator = chunkProviderServer.chunkGenerator;
                 Chunk newChunk = generator.generateChunk(oldChunk.x, oldChunk.z);
 
@@ -130,109 +120,10 @@ public class ItemPortalToken extends Item implements IHasModel {
         worldgenendpodium.generate(world, new Random(), exitPortalLocation);
     }
 
-    public static final ItemStack forTerritory(EndTerritory territory, boolean isRare){
-        ItemStack is = new ItemStack(ItemInit.PortalToken, 1, isRare ? 1 : 0);
-        NBT.item(is, true).setByte("territory", (byte)territory.ordinal());
-        return is;
-    }
-
-    public static final ItemStack forTerritory(EndTerritory territory, boolean isRare, Random rand){
-        ItemStack is = forTerritory(territory, isRare);
-        NBT.item(is, true).setInt("variations", territory.properties.generateVariationsSerialized(rand, isRare));
-        return is;
-    }
-
-    public static final @Nullable EndTerritory getTerritory(ItemStack is){
-        return CollectionUtil.get(EndTerritory.values, NBT.item(is, false).getByte("territory")).orElse(null);
-    }
-
-    public static final boolean isRare(ItemStack is){
-        return is.getItemDamage() == 1;
-    }
-
-    public static final boolean isExpired(ItemStack is){
-        return is.getItemDamage() == 2;
-    }
-
-    public static final EnumSet<? extends Enum<?>> getVariations(ItemStack is){
-        EndTerritory territory = getTerritory(is);
-        if (territory == null)return EmptyEnumSet.get();
-
-        return territory.properties.deserialize(NBT.item(is, false).getInt("variations"));
-    }
-
-    public static final Optional<Pos> generateTerritory(ItemStack is, World world){
-        WorldFile file = SaveData.global(WorldFile.class);
-
-        NBTCompound tag = NBT.item(is, true);
-        //tmp if (tag.hasKey("thash"))return Optional.of(file.getTerritoryPos(tag.getLong("thash")));
-
-        EndTerritory territory = getTerritory(is);
-        if (territory == null)return Optional.empty();
-
-        final int index = file.increment(territory);
-        final long hash = territory.getHashFromIndex(index);
-
-        final EnumSet<? extends Enum<?>> variations = getVariations(is);
-        final Pos spawnPos = territory.generateTerritory(index, world, territory.createRandom(world.getSeed(), index), variations, isRare(is));
-
-        if (isRare(is)){
-            file.setTerritoryRare(hash);
-            is.setItemDamage(2);
-        }
-
-        file.setTerritoryPos(hash, spawnPos);
-        file.setTerritoryVariations(hash, variations);
-
-        tag.setLong("thash", hash);
-        return Optional.of(spawnPos);
-    }
-
-    /*@Override
-    public String getUnlocalizedName(ItemStack is){
-        return isRare(is) ? getUnlocalizedName()+".rare" : getUnlocalizedName();
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack is, World worldIn, List<String> textLines, ITooltipFlag flagIn){
-        final int territory = NBT.item(is, false).getByte("territory");
-        textLines.add(I18n.format("territory."+territory));
-
-        final int variations = NBT.item(is, false).getInt("variations");
-
-        if (variations != 0){
-            BitStream.forInt(variations).forEach(ordinal -> {
-                textLines.add(I18n.format("territory."+territory+".variation."+ordinal));
-            });
-        }
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list){
-        for(EndTerritory territory:EndTerritory.values){
-            if (territory.canGenerate()){
-                list.add(forTerritory(territory, false));
-                list.add(forTerritory(territory, true));
-            }
-        }
-    }
-
-    @SideOnly(Side.CLIENT)
-    public boolean requiresMultipleRenderPasses(){
-        return true;
-    }
-*/
     @Override
     public void registerModels(){
         Main.proxy.registerItemRenderer(this,0,"inventory");
     }
 
-    /*@Override
-    @SideOnly(Side.CLIENT)
-    public int getRenderPasses(int damage){
-        return damage == 1 ? 3 : 2;
-    }*/
 
 }
