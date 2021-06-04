@@ -451,7 +451,7 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
             spawnCooldown = 0;
 
             if (dragonPart != dragonPartHead)amount = amount/3+1;
-            amount = Math.min(amount, 15);
+            amount = Math.min(amount, CommonProxy.opMobs ? 14F : 18F);
 
             int players = attacks.getViablePlayers().size();
             if (players > 1)amount = amount*(1F-Math.max(0.5F, (players-1)*0.05F));
@@ -574,11 +574,11 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
 
                     healingEnderCrystal = null;
                 }
-                else if (ticksExisted%10 == 0 && getHealth() < getMaxHealth())setHealth(getHealth()+(2F));
+                else if (ticksExisted%10 == 0 && getHealth() < getMaxHealth())setHealth(getHealth()+(CommonProxy.opMobs ? 1F : 2F));
             }
 
             if (rand.nextInt(10) == 0){
-                float dist = 30F+4F*worldObj.getDifficulty().getDifficultyId()+(0F);
+                float dist = 30F+4F*worldObj.getDifficulty().getDifficultyId()+(CommonProxy.opMobs ? 8F : 0F);
                 healingEnderCrystal = EntitySelector.closest(this, EntityEnderCrystal.class, getEntityBoundingBox().expand(dist, dist, dist));
             }
         }
