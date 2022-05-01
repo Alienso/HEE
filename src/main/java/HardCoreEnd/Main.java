@@ -5,6 +5,7 @@ import HardCoreEnd.event.MyEventHandler;
 import HardCoreEnd.network.PacketPipeline;
 import HardCoreEnd.proxy.FXClientProxy;
 import HardCoreEnd.save.SaveData;
+import HardCoreEnd.sound.MusicManager;
 import HardCoreEnd.util.Reference;
 import HardCoreEnd.util.handlers.RegistryHandler;
 import net.minecraftforge.common.MinecraftForge;
@@ -31,19 +32,17 @@ public class Main {
 
     @Mod.EventHandler
     public static void preInit(FMLPreInitializationEvent event) {
-        SaveData.register();
-        DragonChunkManager.register();
-        sourceFile = event.getSourceFile();
-        RegistryHandler.preInitRegistries();
+        proxy.preInitRegistries(event);
     };
 
     @Mod.EventHandler
     public static void init(FMLInitializationEvent event) {
-        MinecraftForge.EVENT_BUS.register(new MyEventHandler());
-        PacketPipeline.initializePipeline();
+        proxy.initRegistries(event);
     };
 
     @Mod.EventHandler
-    public static void postInit(FMLPostInitializationEvent event) {};
+    public static void postInit(FMLPostInitializationEvent event) {
+        proxy.postInitRegistries(event);
+    };
 
 }

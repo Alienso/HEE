@@ -110,7 +110,7 @@ public final class CustomMusicTicker extends MusicTicker {
         MusicType type = mc.getAmbientMusicType();
 
         if (currentMusic != null){
-            if (!type.getMusicLocation().equals(currentMusic.getSoundLocation())){
+            if (!type.getMusicLocation().getSoundName().equals(currentMusic.getSoundLocation())){ //TODO added getSoundName to fix equals may break something
                 mc.getSoundHandler().stopSound(currentMusic);
                 currentMusic = null;
                 vanillaMusicTimer = MusicManager.removeVanillaDelay ? getShortDelay() : (rand.nextInt(type.getMinDelay()/8) + type.getMinDelay()/8);

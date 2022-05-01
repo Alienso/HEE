@@ -1,5 +1,6 @@
 package HardCoreEnd.sound;
 
+import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,6 +25,7 @@ import org.jline.utils.Log;
 public final class MusicManager{
     public static boolean enableCustomMusic = true;
     public static boolean removeVanillaDelay = false;
+    public static MusicManager instance;
 
     private static final Set<String> ignoredTickers = new HashSet<>(1); // TODO add vazkii.ambience.NilMusicTicker
 
@@ -37,16 +39,19 @@ public final class MusicManager{
     }
 
     public static void register(){
-        GameRegistryUtil.registerEventHandler(new MusicManager());
+
+        instance = new MusicManager();
+        GameRegistryUtil.registerEventHandler(instance);
     }
 
     private boolean hasLoaded;
 
     private MusicManager(){}
 
-    /*@SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onSoundLoad(SoundLoadEvent e){
-        if (hasLoaded || (!enableCustomMusic && !removeVanillaDelay))return;
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void onSoundLoad(SoundLoadEvent e) throws NoSuchFieldException, IllegalAccessException {
+        //if (hasLoaded || (!enableCustomMusic && !removeVanillaDelay))return;
+        if (hasLoaded) return;
 
         Minecraft mc = Minecraft.getMinecraft();
 
@@ -57,17 +62,22 @@ public final class MusicManager{
                 Log.warn("Another mod has already replaced the music system: $0", tickerClass.getName());
             }
             else if (tickerClass == MusicTicker.class){
-                //mc.getMusicTicker() = new CustomMusicTicker(mc, null);
+                Field ticker = mc.getClass().getDeclaredField("mcMusicTicker");
+                ticker.setAccessible(true);
+                ticker.set(mc,new CustomMusicTicker(mc, null));
+                //mc.mcMusicTicker = new CustomMusicTicker(mc, null);
                 Log.info("Successfully replaced music system.");
             }
             else{
                 //mc.mcMusicTicker = new CustomMusicTicker(mc, mc.getMusicTicker());
+                Field ticker = mc.getClass().getField("mcMusicTicker");
+                ticker.set(mc,new CustomMusicTicker(mc, mc.getMusicTicker()));
                 Log.info("Successfully wrapped a music system replaced by another mod: $0", tickerClass.getName());
             }
 
             hasLoaded = true;
         }
-    }*/
+    }
 
     public static void switchMusic(SoundEvent e){
         Minecraft mc = Minecraft.getMinecraft();

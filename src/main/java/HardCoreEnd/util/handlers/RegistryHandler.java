@@ -32,13 +32,4 @@ public class RegistryHandler {
                 ((IHasModel)item).registerModels();
         }
     }
-
-    public static void preInitRegistries(){
-        EntityInit.registerEntity();
-        SoundsHandler.registerSounds();
-    }
-
-    public static void postInitRegistries(){
-
-    }
 }

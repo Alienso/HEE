@@ -1,5 +1,6 @@
 package HardCoreEnd.util.handlers;
 
+import HardCoreEnd.sound.MusicManager;
 import HardCoreEnd.util.Reference;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;

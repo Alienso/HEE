@@ -126,7 +126,7 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
         isImmuneToFire = true;
         targetY = 100D;
         ignoreFrustumCheck = true;
-        switchMusic(SoundsHandler.MUSIC_END);
+        //switchMusic(SoundsHandler.MUSIC_END);
 
         if (!world.isRemote && world.provider instanceof WorldProviderEnd)
         {
@@ -199,7 +199,7 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
             }
             if (should_change_music){
                 should_change_music = false;
-                this.switchMusic(SoundsHandler.MUSIC_DRAGON);
+                //this.switchMusic(SoundsHandler.MUSIC_DRAGON);
             }
             if (!world.isRemote){
                 if (spawnCooldown > 0 && --spawnCooldown > 0 && ticksExisted%20 == 0){
