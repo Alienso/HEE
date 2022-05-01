@@ -65,6 +65,7 @@ public final class MusicManager{
                 Field ticker = mc.getClass().getDeclaredField("mcMusicTicker");
                 ticker.setAccessible(true);
                 ticker.set(mc,new CustomMusicTicker(mc, null));
+
                 //mc.mcMusicTicker = new CustomMusicTicker(mc, null);
                 Log.info("Successfully replaced music system.");
             }

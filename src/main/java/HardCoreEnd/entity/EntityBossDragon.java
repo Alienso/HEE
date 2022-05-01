@@ -35,6 +35,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.server.management.PlayerChunkMap;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -49,7 +50,9 @@ import java.util.List;
 
 public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, IMob {
 
+    private static int tmp = 0;
     private final DragonFightManager fightManager;
+    private EntityDataWatcher entityData;
     public World worldObj = getWorld();
     public BossInfoServer bossInfo = (BossInfoServer)(new BossInfoServer(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS)).setDarkenSky(true);;
 
@@ -85,7 +88,7 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
     boolean should_change_music = false;
 
     public float WING_SPEED = 0;
-    public boolean ANGRY = false;
+    public DataParameter<Boolean> ANGRY;
     public EntityPlayer target;
     public double targetX, targetY, targetZ;
     public boolean angryStatus, forceAttackEnd, noViablePlayers, freezeAI, frozen;
@@ -114,12 +117,14 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
         dragonPartTail3 = new MultiPartEntityPart(this, "tail", 4.0F, 4.0F);
         dragonPartWing1 = new MultiPartEntityPart(this, "wing", 4.0F, 4.0F);
         dragonPartWing2 = new MultiPartEntityPart(this, "wing", 4.0F, 4.0F);
-        dragonPartArray = new MultiPartEntityPart[]{
+        /*dragonPartArray = new MultiPartEntityPart[]{
                 dragonPartHead = new MultiPartEntityPart(this, "head", 6F, 6F), dragonPartBody = new MultiPartEntityPart(this, "body", 8F, 8F),
                 dragonPartTail1 = new MultiPartEntityPart(this, "tail", 4F, 4F), dragonPartTail2 = new MultiPartEntityPart(this, "tail", 4F, 4F),
                 dragonPartTail3 = new MultiPartEntityPart(this, "tail", 4F, 4F), dragonPartWing1 = new MultiPartEntityPart(this, "wing", 4F, 4F),
                 dragonPartWing2 = new MultiPartEntityPart(this, "wing", 4F, 4F)
-        };
+        };*/
+        this.dragonPartArray = new MultiPartEntityPart[] {this.dragonPartHead, this.dragonPartNeck, this.dragonPartBody, this.dragonPartTail1, this.dragonPartTail2, this.dragonPartTail3, this.dragonPartWing1, this.dragonPartWing2};
+
         setHealth(getMaxHealth());
         setSize(16F, 8F);
         noClip = true;
@@ -127,6 +132,8 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
         targetY = 100D;
         ignoreFrustumCheck = true;
         //switchMusic(SoundsHandler.MUSIC_END);
+        /*if (world.isRemote && !change_lock)
+            EndMusicType.update(EndMusicType.DRAGON_CALM);*/
 
         if (!world.isRemote && world.provider instanceof WorldProviderEnd)
         {
@@ -152,8 +159,8 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
         attacks.registerSpecial(new DragonAttackBloodlust(this, 5, 7).setDisabledPassiveAttacks(ATTACK_FIREBALL, ATTACK_BITE));
     }
 
-    @Override
-    public World getWorld() {
+        @Override
+        public World getWorld() {
         return this.world;
     }
 
@@ -167,6 +174,8 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
         @Override
         protected void entityInit(){
             super.entityInit();
+            entityData = new EntityDataWatcher(this);
+            ANGRY = entityData.addBoolean(113,false);
         }
 
         @Override
@@ -193,14 +202,17 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
             if (currentAttack == null)currentAttack = defaultAttack;
             angryStatus = isAngry();
 
-            if (!change_lock && !angryStatus && attacks.getHealthPercentage() <= 80 && world.isRemote) {
+            if(angryStatus && world.isRemote)
+                EndMusicType.update(EndMusicType.DRAGON_ANGRY);
+
+            /*if (!change_lock && angryStatus && world.isRemote) {
                 should_change_music = true;
                 change_lock = true;
             }
-            if (should_change_music){
+            if (should_change_music && world.isRemote){
                 should_change_music = false;
-                //this.switchMusic(SoundsHandler.MUSIC_DRAGON);
-            }
+                EndMusicType.update(EndMusicType.DRAGON_ANGRY);
+            }*/
             if (!world.isRemote){
                 if (spawnCooldown > 0 && --spawnCooldown > 0 && ticksExisted%20 == 0){
                     for(EntityPlayer player:attacks.getViablePlayers()){
@@ -387,6 +399,78 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
                     motionY *= 0.91D;
                 }
 
+                /*if (worldObj.isRemote){
+                    if (newPosRotationIncrements > 0){
+                        double finalPosX = posX+(interpTargetX-posX)/newPosRotationIncrements,
+                                finalPosY = posY+(interpTargetY-posY)/newPosRotationIncrements,
+                                finalPosZ = posZ+(interpTargetZ-posZ)/newPosRotationIncrements;
+                        this.rotationYaw = (float)((double)this.rotationYaw + MathHelper.wrapDegrees(interpTargetYaw-rotationYaw) / (double)this.newPosRotationIncrements);
+                        this.rotationPitch = (float)((double)this.rotationPitch + (this.interpTargetPitch - (double)this.rotationPitch) / (double)this.newPosRotationIncrements);
+                        --newPosRotationIncrements;
+                        setPosition(finalPosX, finalPosY, finalPosZ);
+                        setRotation(rotationYaw, rotationPitch);
+                    }
+                }
+                else{
+                    double xDiff = targetX-posX, yDiff = targetY-posY, zDiff = targetZ-posZ;
+                    double distFromTargetSq = xDiff*xDiff+yDiff*yDiff+zDiff*zDiff;
+
+                    if (noViablePlayers){
+                        forceAttackEnd = true;
+                        trySetTarget(null);
+                        trySetTargetPosition(rand.nextDouble()*60D-30D, targetY, rand.nextDouble()*60D-30D);
+                    }
+
+                    if (target != null){
+                        targetX = target.posX;
+                        targetZ = target.posZ;
+                        targetY = target.getEntityBoundingBox().minY+Math.min(0.4D+Math.sqrt(Math.pow(targetX-posX, 2)+Math.pow(targetZ-posZ, 2))/80D-1D, 10D);
+                    }
+                    else trySetTargetPosition(targetX+rand.nextGaussian()*2D, targetY, targetZ+rand.nextGaussian()*2D);
+
+                    if ((target != null && target.isDead) || distFromTargetSq > 22500D)forceAttackEnd = forceNewTarget = true;
+
+                    if (forceNewTarget || distFromTargetSq < 90D || distFromTargetSq > 22500D || collidedHorizontally || collidedVertically){
+                        setNewTarget();
+                    }
+
+                    yDiff = MathUtil.clamp(yDiff/MathUtil.distance(xDiff, zDiff), -0.6F, 0.6F);
+
+                    motionY += yDiff*0.1D;
+                    rotationYaw = MathHelper.wrapDegrees(rotationYaw);
+                    double d9 = MathUtil.clamp(MathHelper.wrapDegrees(180D-MathUtil.toDeg(Math.atan2(xDiff, zDiff))-rotationYaw), -50D, 50D);
+
+                    Vec3d targetDiffVec = new Vec3d(targetX-posX, targetY-posY, targetZ-posZ).normalize();
+                    Vec3d rotationVec = new Vec3d(MathHelper.sin(MathUtil.toRad(rotationYaw)), motionY, (-MathHelper.cos(MathUtil.toRad(rotationYaw)))).normalize();
+
+                    float f4 = Math.max((float)(rotationVec.dotProduct(targetDiffVec)+0.5D)/1.5F, 0F);
+
+                    randomYawVelocity *= 0.8F;
+                    float speed = MathHelper.sqrt(motionX *motionX+motionZ*motionZ)+1F;
+                    double speedLimited = Math.min(Math.sqrt(motionX*motionX+motionZ*motionZ)+1D, 40D);
+
+                    randomYawVelocity = (float)(randomYawVelocity+d9*(0.7D/speedLimited/speed));
+                    rotationYaw += randomYawVelocity*0.1F;
+                    float f6 = (float)(2D/(speedLimited+1D));
+                    this.moveRelative(0,0, -1F, 0.06F*(f4*f6+(1F-f6)));
+
+                    if (frozen)motionX = motionY = motionZ = 0D;
+
+                    MotionUpdateEvent event = new MotionUpdateEvent(motionX, motionY, motionZ);
+                    currentAttack.onMotionUpdateEvent(event);
+                    motionX = event.motionX;
+                    motionY = event.motionY;
+                    motionZ = event.motionZ;
+
+                    if (slowed)move(MoverType.SELF,motionX*moveSpeedMp*0.8D, motionY*moveSpeedMp*0.8D, motionZ*moveSpeedMp*0.8D);
+                    else move(MoverType.SELF,motionX*moveSpeedMp, motionY*moveSpeedMp, motionZ*moveSpeedMp);
+
+                    double motionMultiplier = 0.8D+0.15D*((new Vec3d(motionX, motionY, motionZ).normalize().dotProduct(rotationVec)+1D)*0.5D);
+                    motionX *= motionMultiplier;
+                    motionZ *= motionMultiplier;
+                    motionY *= 0.91D;
+                }*/
+
                 renderYawOffset = rotationYaw;
                 dragonPartHead.width = dragonPartHead.height = 3F;
                 dragonPartTail1.width = dragonPartTail1.height = 2F;
@@ -402,6 +486,8 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
                 float yawRad = MathUtil.toRad(rotationYaw);
                 float yawSin = MathHelper.sin(yawRad);
                 float yawCos = MathHelper.cos(yawRad);
+                yawCos = (float)Math.cos(Math.toRadians(tmp++));
+                yawSin = (float)Math.sin(Math.toRadians(tmp++));
                 dragonPartBody.onUpdate();
                 dragonPartBody.setLocationAndAngles(posX+yawSin*0.5F, posY, posZ-yawCos*0.5F, 0F, 0F);
                 dragonPartWing1.onUpdate();
@@ -742,13 +828,13 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
         }
 
         public void setAngry(boolean angry){
-            //entityData.setBoolean(Data.ANGRY, angry);
-            this.ANGRY = angry;
+            entityData.setBoolean(ANGRY, angry);
+            //this.ANGRY = angry;
         }
 
         public boolean isAngry(){
-            //return entityData.getBoolean(Data.ANGRY);
-            return this.ANGRY;
+            return entityData.getBoolean(ANGRY);
+            //return this.ANGRY;
         }
 
         public void setWingSpeed(float wingSpeed){

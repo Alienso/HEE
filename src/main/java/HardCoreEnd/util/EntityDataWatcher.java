@@ -3,30 +3,21 @@ import gnu.trove.map.hash.TObjectByteHashMap;
 import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializer;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 
+import java.io.IOException;
+
 public final class EntityDataWatcher{
-    /*private final EntityDataManager watcher;
+    private final EntityDataManager watcher;
     private final TObjectByteHashMap<Enum<?>> idMap;
 
     public EntityDataWatcher(Entity trackedEntity){
         this.watcher = trackedEntity.getDataManager();
         this.idMap = new TObjectByteHashMap<>(8);
-    }
-
-    private void addObject(Enum<?> linkedEnum, Object obj){
-        int internalId = 30-idMap.size();
-        DataParameter<Enum<?>> param = new DataParameter<Enum<?>>(internalId, DataSerializers.);
-        watcher.register(param, obj);
-        idMap.put(linkedEnum, (byte)internalId);
-    }
-
-    private void addObjectByType(Enum<?> linkedEnum, int type){
-        int internalId = 30-idMap.size();
-        watcher.addObjectByDataType(internalId, type);
-        idMap.put(linkedEnum, (byte)internalId);
     }
 
     private int getId(Enum<?> linkedEnum){
@@ -37,31 +28,30 @@ public final class EntityDataWatcher{
 
     // BOOLEAN
 
-    public void addBoolean(Enum<?> linkedEnum){
-        int internalId = 30-idMap.size();
-        DataParameter<Byte> param = new DataParameter<Byte>(internalId, DataSerializers.BYTE);
-        watcher.register(param,(byte)0);
-        idMap.put(linkedEnum, (byte)internalId);
+    public DataParameter<Boolean> addBoolean(int internalId){
+        DataParameter<Boolean> param = new DataParameter<>(internalId,DataSerializers.BOOLEAN);
+        watcher.register(param,false);
+        return param;
     }
 
-    public void addBoolean(Enum<?> linkedEnum, boolean initialValue){
-        int internalId = 30-idMap.size();
-        DataParameter<Byte> param = new DataParameter<Byte>(internalId, DataSerializers.BYTE);
-        watcher.register(param,Byte.valueOf((byte)(initialValue ? 1 : 0)));
-        idMap.put(linkedEnum, (byte)internalId);
+    public DataParameter<Boolean> addBoolean(int internalId,boolean initialValue){
+        DataParameter<Boolean> param = new DataParameter<>(internalId,DataSerializers.BOOLEAN);
+        watcher.register(param,initialValue);
+        return param;
     }
 
-    public boolean getBoolean(Enum<?> linkedEnum){
-        return watcher.get() == 1;
+    public boolean getBoolean(DataParameter<Boolean> param){
+        return watcher.get(param);
     }
 
-    public void setBoolean(Enum<?> linkedEnum, boolean newValue){
-        watcher.updateObject(getId(linkedEnum), Byte.valueOf((byte)(newValue ? 1 : 0)));
+    public void setBoolean(DataParameter<Boolean> param, boolean newValue){
+        watcher.set(param,newValue);
     }
+
 
     // BYTE
 
-    public void addByte(Enum<?> linkedEnum){
+    /*public void addByte(Enum<?> linkedEnum){
         addObject(linkedEnum, Byte.valueOf((byte)0));
     }
 

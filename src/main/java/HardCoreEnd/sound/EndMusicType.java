@@ -1,8 +1,10 @@
 package HardCoreEnd.sound;
 
+import HardCoreEnd.util.handlers.SoundsHandler;
 import net.minecraft.client.audio.MusicTicker;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -11,19 +13,19 @@ import java.util.Random;
 
 @SideOnly(Side.CLIENT)
 public enum EndMusicType{
-    EXPLORATION("music.game.end", 3600, 8400),
-    DRAGON_CALM("music.game.end.dragoncalm"),
-    DRAGON_ANGRY("music.game.end.dragonangry");
+    EXPLORATION(SoundsHandler.MUSIC_END, 3600, 8400),
+    DRAGON_CALM(SoundsHandler.MUSIC_END),
+    DRAGON_ANGRY(SoundsHandler.MUSIC_DRAGON);
 
     // TODO public final boolean isBossMusic;
     private final MusicTicker.MusicType type;
 
-    EndMusicType(String resourceName){
-        this(resourceName, 0, 0);
+    EndMusicType(SoundEvent soundEvent){
+        this(soundEvent, 0, 0);
     }
 
-    EndMusicType(String resourceName, int minDelay, int maxDelay){
-        this.type = createMusicType(this, new ResourceLocation("hardcoreenderexpansion", resourceName), minDelay, maxDelay);
+    EndMusicType(SoundEvent soundEvent, int minDelay, int maxDelay){
+        this.type = createMusicType(this, soundEvent, minDelay, maxDelay);
     }
 
     public int getTimer(Random rand){
@@ -41,8 +43,8 @@ public enum EndMusicType{
         return PositionedSoundRecord.getMusicRecord(type.getMusicLocation());
     }
 
-    private static final MusicTicker.MusicType createMusicType(EndMusicType parent, ResourceLocation resource, int minDelay, int maxDelay){
-        return EnumHelper.addEnum(MusicTicker.MusicType.class, "HEE_"+parent.name(), new Class[]{ ResourceLocation.class, int.class, int.class }, new Object[]{ resource, minDelay, maxDelay });
+    private static MusicTicker.MusicType createMusicType(EndMusicType parent, SoundEvent soundEvent, int minDelay, int maxDelay){
+        return EnumHelper.addEnum(MusicTicker.MusicType.class, "HEE_"+parent.name(), new Class[]{ SoundEvent.class, int.class, int.class }, new Object[]{ soundEvent, minDelay, maxDelay });
     }
 
     private static EndMusicType cachedType = null;

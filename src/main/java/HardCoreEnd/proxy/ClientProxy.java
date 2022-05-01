@@ -6,14 +6,18 @@ import HardCoreEnd.event.MyEventHandler;
 import HardCoreEnd.init.EntityInit;
 import HardCoreEnd.network.PacketPipeline;
 import HardCoreEnd.save.SaveData;
+import HardCoreEnd.sound.CustomMusicTicker;
 import HardCoreEnd.sound.MusicManager;
 import HardCoreEnd.util.handlers.SoundsHandler;
 import net.minecraft.block.Block;
+import net.minecraft.client.audio.MusicTicker;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
@@ -40,14 +44,14 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public void postInitRegistries(FMLPostInitializationEvent event){
-        /*try {
+    public void postInitRegistries(FMLPostInitializationEvent event){ }
+
+    @Override
+    public void onLoadComplete(FMLLoadCompleteEvent e){
+        try {
             MusicManager.instance.onSoundLoad(null);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }*/
+        } catch (NoSuchFieldException | IllegalAccessException noSuchFieldException) {
+            noSuchFieldException.printStackTrace();
+        }
     }
-
-
-
 }

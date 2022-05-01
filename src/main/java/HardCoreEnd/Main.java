@@ -12,6 +12,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import HardCoreEnd.proxy.CommonProxy;
@@ -44,5 +45,10 @@ public class Main {
     public static void postInit(FMLPostInitializationEvent event) {
         proxy.postInitRegistries(event);
     };
+
+    @Mod.EventHandler
+    public void onLoadComplete(FMLLoadCompleteEvent e){
+        proxy.onLoadComplete(e);
+    }
 
 }

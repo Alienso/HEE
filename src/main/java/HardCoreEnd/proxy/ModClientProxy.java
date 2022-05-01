@@ -52,7 +52,7 @@ public class ModClientProxy extends ModCommonProxy{
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockList.loot_chest), new RenderItemLootChest());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockList.enderman_head), new RenderItemEndermanHead());*/
 
-        RenderingRegistry.registerEntityRenderingHandler(EntityBossDragon.class, new RenderBossDragon(renderManager));
+        //RenderingRegistry.registerEntityRenderingHandler(EntityBossDragon.class, new RenderBossDragon(renderManager));
 
        /* RenderingRegistry.registerEntityRenderingHandler(EntityMiniBossEnderEye.class, new RenderMiniBossEnderEye());
         RenderingRegistry.registerEntityRenderingHandler(EntityMiniBossFireFiend.class, new RenderMiniBossFireFiend());

@@ -52,7 +52,7 @@ public final class CustomMusicTicker extends MusicTicker {
         this.wrappedTicker = wrappedTicker;
         this.rand = new Random();
 
-        endMusicTimer = EndMusicType.EXPLORATION.getTimer(rand);
+        //endMusicTimer = EndMusicType.EXPLORATION.getTimer(rand);
     }
 
     @Override
