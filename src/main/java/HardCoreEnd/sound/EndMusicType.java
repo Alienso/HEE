@@ -14,8 +14,8 @@ import java.util.Random;
 @SideOnly(Side.CLIENT)
 public enum EndMusicType{
     EXPLORATION(SoundsHandler.MUSIC_END, 3600, 8400),
-    DRAGON_CALM(SoundsHandler.MUSIC_END),
-    DRAGON_ANGRY(SoundsHandler.MUSIC_DRAGON);
+    DRAGON_CALM(SoundsHandler.MUSIC_DRAGON_CALM),
+    DRAGON_ANGRY(SoundsHandler.MUSIC_DRAGON_ANGRY);
 
     // TODO public final boolean isBossMusic;
     private final MusicTicker.MusicType type;

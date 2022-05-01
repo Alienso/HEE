@@ -6,5 +6,6 @@ entity.AngryEnderman.name=Angry Enderman
 entity.VampiriBat.name=Vampiric Bat
 entity.Dragon.name=Ender Dragon
 
-item.music_dragon.name=In The End
-item.music_end.name=End Music
+item.music_dragon_angry.name=In The End
+item.music_dragon_calm.name=Dragon Calm
+item.game_end.name=End Music

@@ -13,6 +13,7 @@ import HardCoreEnd.init.BlockInit;
 import HardCoreEnd.network.C06SetPlayerVelocity;
 import HardCoreEnd.network.PacketPipeline;
 import HardCoreEnd.proxy.CommonProxy;
+import HardCoreEnd.sound.CustomMusicTicker;
 import HardCoreEnd.sound.EndMusicType;
 import HardCoreEnd.sound.MusicManager;
 import HardCoreEnd.util.EntityAttributes;
@@ -23,6 +24,7 @@ import HardCoreEnd.util.handlers.SoundsHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.MusicTicker;
 import net.minecraft.client.renderer.entity.layers.LayerEnderDragonDeath;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.*;
@@ -132,8 +134,6 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
         targetY = 100D;
         ignoreFrustumCheck = true;
         //switchMusic(SoundsHandler.MUSIC_END);
-        /*if (world.isRemote && !change_lock)
-            EndMusicType.update(EndMusicType.DRAGON_CALM);*/
 
         if (!world.isRemote && world.provider instanceof WorldProviderEnd)
         {
@@ -202,8 +202,21 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
             if (currentAttack == null)currentAttack = defaultAttack;
             angryStatus = isAngry();
 
-            if(angryStatus && world.isRemote)
+            //Order is important since setAngry resets change_lock to false
+            if(angryStatus && world.isRemote) {
                 EndMusicType.update(EndMusicType.DRAGON_ANGRY);
+                if (!change_lock){
+                    change_lock = true;
+                    ((CustomMusicTicker)(Minecraft.getMinecraft().getMusicTicker())).resetEndMusic();
+                }
+            }
+            else if (!angryStatus && world.isRemote){
+                EndMusicType.update(EndMusicType.DRAGON_CALM);
+                if (!change_lock){
+                    change_lock = true;
+                    ((CustomMusicTicker)(Minecraft.getMinecraft().getMusicTicker())).resetEndMusic();
+                }
+            }
 
             /*if (!change_lock && angryStatus && world.isRemote) {
                 should_change_music = true;
@@ -829,6 +842,7 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
 
         public void setAngry(boolean angry){
             entityData.setBoolean(ANGRY, angry);
+            change_lock = false;
             //this.ANGRY = angry;
         }
 

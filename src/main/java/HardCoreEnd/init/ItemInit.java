@@ -14,6 +14,7 @@ public class ItemInit {
 
     public static final Item PortalToken = new ItemPortalToken("item_portal_token");
 
-    public static final Item DragonDisc = new CustomMusicDisc("music_dragon", SoundsHandler.MUSIC_DRAGON);
-    public static final Item EndDisc = new CustomMusicDisc("music_end",SoundsHandler.MUSIC_END);
+    public static final Item DragonAngryDisc = new CustomMusicDisc("music_dragon_angry", SoundsHandler.MUSIC_DRAGON_ANGRY);
+    public static final Item DragonCalmDisc = new CustomMusicDisc("music_dragon_calm", SoundsHandler.MUSIC_DRAGON_CALM);
+    public static final Item EndDisc = new CustomMusicDisc("game_end",SoundsHandler.MUSIC_END);
 }

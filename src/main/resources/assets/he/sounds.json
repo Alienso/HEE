@@ -1,17 +1,25 @@
 {
-  "music.music_dragon": {
-    "category": "record",
+  "music.music_dragon_angry": {
     "sounds": [{
-      "name": "he:records/music_dragon",
+      "name": "he:records/music_dragon_angry",
       "stream": true
     }]
   },
 
-  "music.music_end": {
-    "category": "record",
+  "music.music_dragon_calm": {
     "sounds": [{
-      "name": "he:records/music_end",
+      "name": "he:records/music_dragon_calm",
       "stream": true
     }]
+  },
+
+  "music.game_end": {
+    "sounds": [{
+      "name": "he:records/music_crying_soul",
+      "stream": true
+    }, {
+      "name": "he:records/music_onion",
+      "stream": true
+      }]
   }
 }

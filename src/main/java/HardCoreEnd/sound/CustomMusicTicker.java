@@ -131,7 +131,7 @@ public final class CustomMusicTicker extends MusicTicker {
         resetEndMusic();
     }
 
-    private void resetEndMusic(){
+    public void resetEndMusic(){
         endMusicTimer = 3600;
         playingEndMusicType = null;
     }
