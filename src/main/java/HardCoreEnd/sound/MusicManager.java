@@ -25,10 +25,11 @@ import org.jline.utils.Log;
 public final class MusicManager{
     public static boolean enableCustomMusic = true;
     public static boolean removeVanillaDelay = false;
+    public ResourceLocation location;
+
     public static MusicManager instance;
 
     private static final Set<String> ignoredTickers = new HashSet<>(1); // TODO add vazkii.ambience.NilMusicTicker
-
     public static boolean addIgnoredTicker(String fullClassName){
         return ignoredTickers.add(fullClassName);
     }
@@ -39,14 +40,15 @@ public final class MusicManager{
     }
 
     public static void register(){
-
         instance = new MusicManager();
         GameRegistryUtil.registerEventHandler(instance);
     }
 
     private boolean hasLoaded;
 
-    private MusicManager(){}
+    private MusicManager(){
+        this.location = new ResourceLocation("hardcoreenderexpansion","music.game_end");
+    }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onSoundLoad(SoundLoadEvent e) throws NoSuchFieldException, IllegalAccessException {
@@ -78,6 +80,10 @@ public final class MusicManager{
 
             hasLoaded = true;
         }
+    }
+
+    public static boolean isMusicAvailable(){
+        return MusicManager.isMusicAvailable(MusicManager.instance.location);
     }
 
     public static void switchMusic(SoundEvent e){

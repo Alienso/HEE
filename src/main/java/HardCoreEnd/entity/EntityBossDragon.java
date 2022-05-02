@@ -204,17 +204,21 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
 
             //Order is important since setAngry resets change_lock to false
             if(angryStatus && world.isRemote) {
-                EndMusicType.update(EndMusicType.DRAGON_ANGRY);
-                if (!change_lock){
-                    change_lock = true;
-                    ((CustomMusicTicker)(Minecraft.getMinecraft().getMusicTicker())).resetEndMusic();
+                if (MusicManager.isMusicAvailable()) {
+                    EndMusicType.update(EndMusicType.DRAGON_ANGRY);
+                    if (!change_lock) {
+                        change_lock = true;
+                        ((CustomMusicTicker) (Minecraft.getMinecraft().getMusicTicker())).resetEndMusic();
+                    }
                 }
             }
             else if (!angryStatus && world.isRemote){
-                EndMusicType.update(EndMusicType.DRAGON_CALM);
-                if (!change_lock){
-                    change_lock = true;
-                    ((CustomMusicTicker)(Minecraft.getMinecraft().getMusicTicker())).resetEndMusic();
+                if (MusicManager.isMusicAvailable()) {
+                    EndMusicType.update(EndMusicType.DRAGON_CALM);
+                    if (!change_lock) {
+                        change_lock = true;
+                        ((CustomMusicTicker) (Minecraft.getMinecraft().getMusicTicker())).resetEndMusic();
+                    }
                 }
             }
 
