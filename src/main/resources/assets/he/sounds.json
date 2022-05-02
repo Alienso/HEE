@@ -1,25 +1,25 @@
 {
   "music.music_dragon_angry": {
     "sounds": [{
-      "name": "he:records/music_dragon_angry",
+      "name": "hardcoreenderexpansion:music/in_the_end",
       "stream": true
     }]
   },
 
   "music.music_dragon_calm": {
     "sounds": [{
-      "name": "he:records/music_dragon_calm",
+      "name": "hardcoreenderexpansion:music/beat_the_dragon",
       "stream": true
     }]
   },
 
   "music.game_end": {
     "sounds": [{
-      "name": "he:records/music_crying_soul",
+      "name": "hardcoreenderexpansion:music/crying_soul",
       "stream": true
     }, {
-      "name": "he:records/music_onion",
+      "name": "hardcoreenderexpansion:music/onion",
       "stream": true
-      }]
+    }]
   }
 }

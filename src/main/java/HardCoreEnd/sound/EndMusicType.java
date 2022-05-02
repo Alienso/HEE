@@ -1,8 +1,9 @@
 package HardCoreEnd.sound;
 
 import HardCoreEnd.util.handlers.SoundsHandler;
-import net.minecraft.client.audio.MusicTicker;
-import net.minecraft.client.audio.PositionedSoundRecord;
+import com.sun.org.apache.regexp.internal.RE;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.util.EnumHelper;
@@ -20,11 +21,13 @@ public enum EndMusicType{
     // TODO public final boolean isBossMusic;
     private final MusicTicker.MusicType type;
 
-    EndMusicType(SoundEvent soundEvent){
-        this(soundEvent, 0, 0);
+    EndMusicType(SoundEvent e){
+        this(e, 0, 0);
     }
 
     EndMusicType(SoundEvent soundEvent, int minDelay, int maxDelay){
+        //SoundEvent soundEvent = SoundEvent.REGISTRY.getObject(new ResourceLocation("hardcoreenderexpansion",location));
+        //SoundEvent soundEvent = new SoundEvent(new ResourceLocation(location));
         this.type = createMusicType(this, soundEvent, minDelay, maxDelay);
     }
 
@@ -39,7 +42,6 @@ public enum EndMusicType{
     }
 
     public PositionedSoundRecord getPositionedSoundRecord(){
-        //return PositionedSoundRecord.func_147673_a(type.getMusicLocation());
         return PositionedSoundRecord.getMusicRecord(type.getMusicLocation());
     }
 

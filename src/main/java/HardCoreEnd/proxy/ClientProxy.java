@@ -12,7 +12,9 @@ import HardCoreEnd.util.handlers.SoundsHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.audio.MusicTicker;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -48,10 +50,13 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void onLoadComplete(FMLLoadCompleteEvent e){
-        try {
-            MusicManager.instance.onSoundLoad(null);
-        } catch (NoSuchFieldException | IllegalAccessException noSuchFieldException) {
-            noSuchFieldException.printStackTrace();
+
+        if (MusicManager.isMusicAvailable(new ResourceLocation("hardcoreenderexpansion","music.game_end"))) {
+            try {
+                MusicManager.instance.onSoundLoad(null);
+            } catch (NoSuchFieldException | IllegalAccessException noSuchFieldException) {
+                noSuchFieldException.printStackTrace();
+            }
         }
     }
 }
