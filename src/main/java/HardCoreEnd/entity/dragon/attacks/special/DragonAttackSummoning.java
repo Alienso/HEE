@@ -75,7 +75,7 @@ public class DragonAttackSummoning extends DragonSpecialAttackBase {
 
                         continue;
                     }
-                    }catch (Exception e){e.printStackTrace();}
+                    }catch (Exception ignored){}
 
                     for (int a = 0; a < 3 + rand.nextInt(getDifficulty()); a++) {
 						double x = player.posX+(rand.nextDouble()-0.5D)*13D, z = player.posZ+(rand.nextDouble()-0.5D)*13D;

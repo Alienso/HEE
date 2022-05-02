@@ -1,10 +1,7 @@
 package HardCoreEnd.sound;
 
 import HardCoreEnd.util.handlers.SoundsHandler;
-import com.sun.org.apache.regexp.internal.RE;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.*;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.relauncher.Side;

@@ -677,12 +677,19 @@ public class EntityBossDragon extends EntityDragon implements IEntityMultiPart, 
 
                     healingEnderCrystal = null;
                 }
-                else if (ticksExisted%10 == 0 && getHealth() < getMaxHealth())setHealth(getHealth()+(CommonProxy.opMobs ? 1F : 2F));
+                else if (ticksExisted%10 == 0 && getHealth() < getMaxHealth()) {
+                    setHealth(getHealth() + (CommonProxy.opMobs ? 1F : 2F));
+                    healingEnderCrystal.setBeamTarget(new BlockPos(this.posX,this.posY,this.posZ));
+                }
             }
 
             if (rand.nextInt(10) == 0){
                 float dist = 30F+4F*worldObj.getDifficulty().getDifficultyId()+(CommonProxy.opMobs ? 8F : 0F);
+                if (healingEnderCrystal!=null)
+                    healingEnderCrystal.setBeamTarget(null);
                 healingEnderCrystal = EntitySelector.closest(this, EntityEnderCrystal.class, getEntityBoundingBox().expand(dist, dist, dist));
+                if (healingEnderCrystal!=null)
+                    healingEnderCrystal.setBeamTarget(new BlockPos(this.posX,this.posY,this.posZ));
             }
         }
 

@@ -1,7 +1,9 @@
 package HardCoreEnd.objects.items;
 
 
+import HardCoreEnd.Main;
 import HardCoreEnd.init.ItemInit;
+import HardCoreEnd.util.IHasModel;
 import net.minecraft.block.BlockJukebox;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -18,7 +20,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class CustomMusicDisc extends ItemRecord {
+public class CustomMusicDisc extends ItemRecord implements IHasModel {
 
     public CustomMusicDisc(String name, SoundEvent soundIn) {
         super(name, soundIn);
@@ -29,28 +31,7 @@ public class CustomMusicDisc extends ItemRecord {
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
-    {
-
-        IBlockState iblockstate = worldIn.getBlockState(pos);
-
-        if (iblockstate.getBlock() == Blocks.JUKEBOX && !((Boolean)iblockstate.getValue(BlockJukebox.HAS_RECORD)).booleanValue())
-        {
-            if (!worldIn.isRemote)
-            {
-                ItemStack itemstack = player.getHeldItem(hand);
-                ((BlockJukebox)Blocks.JUKEBOX).insertRecord(worldIn, pos, iblockstate, itemstack);
-                worldIn.playEvent((EntityPlayer)null, 1010, pos, Item.getIdFromItem(this));
-                itemstack.shrink(1);
-                player.addStat(StatList.RECORD_PLAYED);
-            }
-
-            return EnumActionResult.SUCCESS;
-        }
-        else
-        {
-            return EnumActionResult.PASS;
-        }
+    public void registerModels(){
+        Main.proxy.registerItemRenderer(this,0,"inventory");
     }
-
 }
